@@ -1,0 +1,58 @@
+<app-window
+  title="autoforge — lifecycle.demo"
+  tag="illustrative"
+  role="group"
+  aria-label="AutoForge, illustrated: agents move through design, develop, test and maintain, all reading one operating contract"
+>
+  <div class="demo agents">
+    <svg class="ring loop" viewBox="0 0 320 320" aria-hidden="true" focusable="false">
+      <circle class="ring__track" cx="160" cy="160" r="114" />
+
+      @for (stage of stages; track stage.name; let i = $index) {
+        <line
+          class="ring__spoke"
+          [class.is-active]="i === active()"
+          x1="160"
+          y1="160"
+          [attr.x2]="stage.x"
+          [attr.y2]="stage.y"
+        />
+      }
+
+      <g class="ring__token" [style.transform]="'rotate(' + angle() + 'deg)'">
+        <circle class="ring__token-glow" cx="160" cy="46" r="11" />
+        <circle class="ring__token-core" cx="160" cy="46" r="4" />
+      </g>
+
+      <g class="contract">
+        <rect class="contract__box" x="100" y="116" width="120" height="88" rx="8" />
+        <text class="contract__title" x="160" y="136" text-anchor="middle">operating contract</text>
+        @for (file of contract; track file; let i = $index) {
+          <text class="contract__file" x="160" [attr.y]="158 + i * 17" text-anchor="middle">
+            {{ file }}
+          </text>
+        }
+      </g>
+
+      @for (stage of stages; track stage.name; let i = $index) {
+        <g class="stage" [class.is-active]="i === active()">
+          <rect
+            class="stage__box"
+            [attr.x]="stage.x - 42"
+            [attr.y]="stage.y - 15"
+            width="84"
+            height="30"
+            rx="15"
+          />
+          <text class="stage__label" [attr.x]="stage.x" [attr.y]="stage.y" text-anchor="middle">
+            {{ stage.name }}
+          </text>
+        </g>
+      }
+    </svg>
+
+    <p class="agents__log" aria-hidden="true">
+      <span class="agents__prompt">$</span> {{ logLine() }}
+    </p>
+  </div>
+</app-window>

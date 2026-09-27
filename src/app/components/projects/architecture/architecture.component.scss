@@ -1,0 +1,254 @@
+@use 'breakpoints' as bp;
+
+:host {
+  display: block;
+}
+
+.arch {
+  display: grid;
+  justify-items: stretch;
+}
+
+.arch__caption {
+  margin-bottom: var(--space-4);
+}
+
+.arch__clients {
+  justify-self: center;
+  padding: 0.35rem 1rem;
+  border: 1px dashed var(--color-border-strong);
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+// ── Connectors ─────────────────────────────────────────────────────────────
+
+.arch__link {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  height: 3.25rem;
+}
+
+.arch__wire {
+  position: relative;
+  width: 2px;
+  height: 100%;
+  background: repeating-linear-gradient(
+    to bottom,
+    var(--color-border-strong) 0 4px,
+    transparent 4px 8px
+  );
+}
+
+.arch__packet {
+  position: absolute;
+  left: 50%;
+  width: 7px;
+  height: 7px;
+  margin-left: -3.5px;
+  border-radius: 50%;
+  opacity: 0;
+}
+
+.arch__packet--down {
+  background: var(--color-accent);
+  box-shadow: 0 0 10px var(--color-accent-glow);
+}
+
+.arch__packet--up {
+  background: var(--color-success);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--color-success) 60%, transparent);
+}
+
+.arch__link-label {
+  position: absolute;
+  top: 50%;
+  left: calc(50% + 1rem);
+  transform: translateY(-50%);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  color: var(--syntax-comment);
+  white-space: nowrap;
+}
+
+// ── Tiers ──────────────────────────────────────────────────────────────────
+
+.arch__tier {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+
+  @include bp.up(sm) {
+    grid-template-columns: 6.5rem minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
+.arch__tier-name {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  line-height: 2;
+}
+
+.arch__tier-body {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.arch__notes {
+  display: grid;
+  gap: 0.15rem;
+  list-style: none;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+
+  li::before {
+    content: '→ ';
+    content: '→ ' / '';
+    color: var(--syntax-comment);
+  }
+}
+
+// Databases drawn as cylinders.
+.arch__stores {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  list-style: none;
+}
+
+.store {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-width: 7.25rem;
+  height: 3.9rem;
+  padding: 0.9rem 0.75rem 0.3rem;
+  border: 1px solid var(--color-border-strong);
+  border-radius: 50% / 0.65rem;
+  background: linear-gradient(var(--color-surface-2), var(--color-surface));
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  color: var(--color-text);
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    right: -1px;
+    left: -1px;
+    height: 1.3rem;
+    border: 1px solid var(--color-border-strong);
+    border-radius: 50%;
+    background: var(--color-surface-2);
+  }
+}
+
+// ── Delivery ───────────────────────────────────────────────────────────────
+
+.arch__delivery {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-4);
+  margin-top: var(--space-5);
+  padding: var(--space-3) var(--space-5);
+  overflow: hidden;
+  border: 1px dashed var(--color-border-strong);
+  border-radius: var(--radius-lg);
+}
+
+.arch__delivery-note {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+// A build running along the bottom of the pipeline.
+.arch__build {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 30%;
+  height: 2px;
+  background: linear-gradient(to right, transparent, var(--color-accent), transparent);
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .arch__packet--down {
+    animation: packet-down 2.8s var(--ease-in-out) infinite;
+  }
+
+  .arch__packet--up {
+    animation: packet-up 2.8s var(--ease-in-out) infinite 1.4s;
+  }
+
+  .arch__build {
+    animation: build 3.6s var(--ease-in-out) infinite;
+  }
+
+  @keyframes packet-down {
+    0% {
+      top: 0;
+      opacity: 0;
+    }
+    15%,
+    85% {
+      opacity: 1;
+    }
+    100% {
+      top: calc(100% - 7px);
+      opacity: 0;
+    }
+  }
+
+  @keyframes packet-up {
+    0% {
+      top: calc(100% - 7px);
+      opacity: 0;
+    }
+    15%,
+    85% {
+      opacity: 1;
+    }
+    100% {
+      top: 0;
+      opacity: 0;
+    }
+  }
+
+  @keyframes build {
+    0% {
+      left: -30%;
+      opacity: 1;
+    }
+    100% {
+      left: 100%;
+      opacity: 1;
+    }
+  }
+}
+
+@media print {
+  .arch__link {
+    height: 1rem;
+  }
+
+  .arch__packet,
+  .arch__build,
+  .arch__link-label {
+    display: none;
+  }
+}

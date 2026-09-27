@@ -1,0 +1,40 @@
+<div class="overlays" aria-hidden="true">
+  @for (item of components(); track item.element) {
+    @if (item.box; as box) {
+      <div
+        class="overlay"
+        [class.is-highlighted]="highlighted() === item.element"
+        [style.top.px]="box.top"
+        [style.left.px]="box.left"
+        [style.width.px]="box.width"
+        [style.height.px]="box.height"
+      >
+        <span class="overlay__label">&lt;{{ item.selector }}&gt;</span>
+      </div>
+    }
+  }
+</div>
+
+<aside class="panel" aria-labelledby="inspector-title">
+  <header class="panel__header">
+    <h2 id="inspector-title" class="panel__title">
+      <app-icon name="inspect" />
+      Component tree
+    </h2>
+    <button type="button" class="panel__close" (click)="inspector.toggle()">
+      <app-icon name="close" />
+      <span class="visually-hidden">Close the component inspector</span>
+    </button>
+  </header>
+  <p class="panel__note">Standalone · OnPush · read live from this page</p>
+  <ul class="tree" role="list">
+    @for (item of components(); track item.element) {
+      <li [style.--depth]="item.depth">
+        <button type="button" class="tree__item" (click)="reveal(item)">
+          <span class="tree__name">{{ item.name }}</span>
+          <span class="tree__selector">{{ item.selector }}</span>
+        </button>
+      </li>
+    }
+  </ul>
+</aside>

@@ -1,0 +1,188 @@
+@use 'breakpoints' as bp;
+
+:host {
+  display: block;
+}
+
+.pipeline__caption {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-5);
+  margin-bottom: var(--space-4);
+}
+
+.pipeline__scale {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+.pipeline__stages {
+  display: grid;
+  gap: var(--space-5);
+  list-style: none;
+
+  @include bp.up(md) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.stage {
+  position: relative;
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+
+  // Flow arrow into the next stage.
+  &:not(:last-child)::after {
+    content: '→';
+    content: '→' / '';
+    position: absolute;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border: 1px solid var(--color-border-strong);
+    border-radius: 50%;
+    background: var(--color-bg);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-accent);
+    // Below the card on small screens, to its right on wider ones.
+    bottom: calc(-0.875rem - var(--space-5) / 2);
+    left: 50%;
+    transform: translateX(-50%) rotate(90deg);
+
+    @include bp.up(md) {
+      top: 50%;
+      right: calc(-0.875rem - var(--space-5) / 2);
+      bottom: auto;
+      left: auto;
+      transform: translateY(-50%);
+    }
+  }
+}
+
+.stage__name {
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.stage__index {
+  margin-right: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 400;
+  color: var(--syntax-comment);
+}
+
+.stage__viz {
+  position: relative;
+  height: 7.5rem;
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: var(--color-bg);
+  mask-image: linear-gradient(to bottom, transparent, #000 18%, #000 82%, transparent);
+}
+
+// 01 — raw, uneven rows streaming in.
+.stream {
+  display: grid;
+  gap: 6px;
+  padding: 6px 10px;
+}
+
+.stream__row {
+  width: var(--w);
+  height: 5px;
+  border-radius: 3px;
+  background: var(--color-border-strong);
+  opacity: 0.8;
+}
+
+// 02 — the same data on a uniform grid, normalised column by column.
+.cells {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 5px;
+  height: 100%;
+  padding: 10px;
+  align-content: center;
+}
+
+.cells__cell {
+  height: 0.85rem;
+  border-radius: 2px;
+  background: var(--color-border);
+}
+
+// 03 — rendered as a dashboard chart.
+.chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  height: 100%;
+  padding: 16px 12px 10px;
+}
+
+.chart__bar {
+  flex: 1;
+  height: var(--h);
+  border-radius: 2px 2px 0 0;
+  background: linear-gradient(to top, var(--color-accent-subtle), var(--color-accent));
+  transform-origin: bottom;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .stream {
+    animation: stream 6s linear infinite;
+  }
+
+  .cells__cell {
+    animation: normalise 2.4s ease-in-out infinite;
+    animation-delay: calc(var(--c) * 0.18s);
+  }
+
+  .chart__bar {
+    animation: render 3.2s var(--ease-in-out) infinite;
+    animation-delay: calc(var(--b) * 0.12s);
+  }
+
+  @keyframes stream {
+    to {
+      transform: translateY(-50%);
+    }
+  }
+
+  @keyframes normalise {
+    0%,
+    100% {
+      background: var(--color-border);
+    }
+    40% {
+      background: var(--color-accent);
+    }
+  }
+
+  @keyframes render {
+    0%,
+    100% {
+      transform: scaleY(1);
+    }
+    50% {
+      transform: scaleY(0.72);
+    }
+  }
+}
+
+@media print {
+  .stage__viz,
+  .stage::after {
+    display: none;
+  }
+}

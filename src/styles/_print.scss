@@ -1,0 +1,79 @@
+@use 'tokens';
+
+// Printing produces a plain résumé-style document: light colours, no chrome,
+// no demos, every revealed-on-scroll element visible. Component-specific print
+// rules live next to each component's styles.
+@media print {
+  :root,
+  :root[data-theme] {
+    @include tokens.light-palette;
+    --color-bg: #fff;
+    --color-surface: #fff;
+    --color-surface-2: #fff;
+    --color-text: #000;
+    --color-text-muted: #3a3a3a;
+    --color-accent: #000;
+    --color-border: #c8c8c8;
+    --color-border-strong: #777;
+    --section-space: 1.25rem;
+    --status-height: 0px;
+    --text-base: 10pt;
+    --text-sm: 9pt;
+    --text-xs: 8pt;
+    --text-2xs: 7.5pt;
+    --text-lg: 11pt;
+    --text-xl: 12.5pt;
+    --text-2xl: 14pt;
+    --text-3xl: 16pt;
+    --text-4xl: 18pt;
+    --text-hero: 26pt;
+  }
+
+  @page {
+    margin: 14mm 16mm;
+  }
+
+  body {
+    line-height: 1.45;
+  }
+
+  .skip-link,
+  .no-print,
+  .cursor-glow,
+  .grain,
+  app-navbar,
+  app-status-bar,
+  app-marquee,
+  app-command-palette,
+  app-toast,
+  app-inspector {
+    display: none !important;
+  }
+
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    break-after: avoid;
+  }
+
+  p,
+  li {
+    orphans: 3;
+    widows: 3;
+  }
+
+  a {
+    text-decoration: none;
+  }
+
+  .chip {
+    padding: 0 0.35rem;
+    background: none;
+  }
+}

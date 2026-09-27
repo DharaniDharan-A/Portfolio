@@ -1,0 +1,158 @@
+<section id="experience" class="section" aria-labelledby="experience-title">
+  <div class="container">
+    <app-section-header
+      index="02"
+      title="Experience"
+      titleId="experience-title"
+      selector="app-experience"
+    >
+      <p class="section__intro">
+        {{ roles.length }} roles on the same product since
+        <app-period [start]="primary.start" [end]="primary.start" /> — read here as releases.
+      </p>
+    </app-section-header>
+  </div>
+
+  <article aria-labelledby="employer-title">
+    <div class="container">
+      <header class="employer" appReveal>
+        <p class="comment">current employer</p>
+        <h3 id="employer-title" class="employer__name">{{ primary.organisation }}</h3>
+        <p class="employer__meta">
+          <span>{{ primary.location }} · {{ primary.arrangement }}</span>&ngsp;
+          <span><app-period [start]="primary.start" [end]="primary.end" /></span>&ngsp;
+          <span>{{ primary.start | tenure: primary.end }}</span>
+        </p>
+      </header>
+    </div>
+
+    <!-- Scrolling through this tall container steps through the releases while
+         the stage stays pinned. Under reduced motion it's a plain list. -->
+    <div
+      class="journey"
+      appScrollProgress="pin"
+      [steps]="releases.length"
+      #journey="scrollProgress"
+      [style.--steps]="releases.length"
+    >
+      @let step = reducedMotion ? releases.length - 1 : journey.step();
+
+      <div class="journey__stage">
+        <div class="container journey__grid">
+          <div class="journey__log">
+            <p class="journey__command" aria-hidden="true">
+              <span class="journey__prompt">$</span> git log --graph --oneline
+            </p>
+            <h4 id="progression-title" class="visually-hidden">Role progression</h4>
+            <ol class="log" role="list" aria-labelledby="progression-title">
+              @for (role of roles; track role.title; let i = $index) {
+                @let release = roles.length - 1 - i;
+                <li
+                  class="log__entry"
+                  [class.is-reached]="release <= step"
+                  [class.is-head]="release === step"
+                >
+                  <span class="log__node" aria-hidden="true"></span>
+                  <span class="log__body">
+                    <span class="log__line">
+                      <span class="log__version" aria-hidden="true">v{{ release + 1 }}.0.0</span>
+                      <span class="log__title">{{ role.title }}</span>
+                      @if (i === 0 && !role.end) {
+                        <span class="visually-hidden">(current role)</span>
+                      }
+                      @if (release === step) {
+                        <span class="log__head" aria-hidden="true">HEAD → main</span>
+                      }
+                    </span>
+                    <span class="log__period">
+                      <app-period [start]="role.start" [end]="role.end" />
+                      <span class="visually-hidden">, </span>
+                      <span aria-hidden="true"> · </span>{{ role.start | tenure: role.end }}
+                    </span>
+                  </span>
+                </li>
+              }
+            </ol>
+          </div>
+
+          <div class="journey__display" aria-hidden="true">
+            <div class="releases">
+              @for (role of releases; track role.title; let i = $index) {
+                <div class="release" [class.is-active]="i === step" [class.is-past]="i < step">
+                  <p class="release__kicker">release {{ i + 1 }} of {{ releases.length }}</p>
+                  <p class="release__version">v{{ i + 1 }}.0.0</p>
+                  <p class="release__title">{{ role.title }}</p>
+                  <p class="release__meta">
+                    <app-period [start]="role.start" [end]="role.end" /> ·
+                    {{ role.start | tenure: role.end }}
+                  </p>
+                  @if (!role.end) {
+                    <p class="release__current"><span class="tag">● current role</span></p>
+                  }
+                </div>
+              }
+            </div>
+            <div class="journey__progress">
+              @for (role of releases; track role.title; let i = $index) {
+                <span class="journey__segment" [class.is-filled]="i <= step"></span>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <h4 id="duties-title" class="comment capabilities__title">What I do</h4>
+      <ol class="capabilities" role="list" aria-labelledby="duties-title">
+        @for (item of primary.responsibilities; track item.detail; let i = $index) {
+          <li class="capability" appSpotlight appReveal [appRevealDelay]="(i % 2) * 90">
+            <span class="capability__index" aria-hidden="true">{{
+              (i + 1).toString().padStart(2, '0')
+            }}</span>
+            <p class="capability__area">{{ item.area }}</p>
+            <p class="capability__detail">{{ item.detail }}</p>
+          </li>
+        }
+      </ol>
+    </div>
+  </article>
+
+  <div class="container">
+    <div class="secondary" appReveal>
+      @for (item of earlier; track item.organisation) {
+        <article class="secondary__item" [attr.aria-labelledby]="'earlier-' + $index">
+          <p class="comment">earlier</p>
+          <h3 class="secondary__title" [id]="'earlier-' + $index">{{ item.organisation }}</h3>
+          <p class="secondary__meta">
+            {{ item.roles[0].title }} · {{ item.location }} · {{ item.arrangement }} ·
+            <app-period [start]="item.start" [end]="item.end" />
+          </p>
+          @if (item.summary) {
+            <p class="secondary__text">{{ item.summary }}</p>
+          }
+          <ul class="rule-list secondary__list" role="list">
+            @for (point of item.responsibilities; track point.detail) {
+              <li>{{ point.detail }}</li>
+            }
+          </ul>
+        </article>
+      }
+
+      <!-- Its own section (h2) so the document outline stays correct;
+           styled as a compact sibling of the entries above. -->
+      <section class="secondary__item" aria-labelledby="education-title">
+        <h2 id="education-title" class="comment">Education</h2>
+        @for (entry of education; track entry.qualification) {
+          <h3 class="secondary__title">{{ entry.qualification }}</h3>
+          <p class="secondary__meta">
+            {{ entry.institution }}, {{ entry.location }} ·
+            <time [attr.datetime]="entry.startYear">{{ entry.startYear }}</time>
+            <span aria-hidden="true">–</span><span class="visually-hidden"> to </span>
+            <time [attr.datetime]="entry.endYear">{{ entry.endYear }}</time>
+          </p>
+        }
+      </section>
+    </div>
+  </div>
+</section>

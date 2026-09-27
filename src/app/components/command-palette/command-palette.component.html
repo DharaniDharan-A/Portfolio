@@ -1,0 +1,58 @@
+<dialog
+  #dialog
+  class="palette"
+  aria-labelledby="palette-title"
+  (close)="onClose()"
+  (click)="onDialogClick($event)"
+>
+  <div class="palette__panel">
+    <h2 id="palette-title" class="visually-hidden">Command palette</h2>
+
+    <div class="palette__search">
+      <app-icon name="search" />
+      <input
+        #input
+        class="palette__input"
+        type="text"
+        role="combobox"
+        aria-label="Type a command or search"
+        aria-autocomplete="list"
+        aria-expanded="true"
+        aria-controls="palette-results"
+        [attr.aria-activedescendant]="activeId()"
+        placeholder="Type a command or search…"
+        autocomplete="off"
+        spellcheck="false"
+        [value]="query()"
+        (input)="onInput(input.value)"
+        (keydown)="onInputKeydown($event)"
+      />
+      <kbd class="key" aria-hidden="true">Esc</kbd>
+    </div>
+
+    <ul id="palette-results" class="palette__results" role="listbox" aria-label="Commands">
+      @for (command of results(); track command.id; let i = $index) {
+        <li
+          class="palette__option"
+          role="option"
+          [id]="'command-' + command.id"
+          [attr.aria-selected]="i === activeIndex()"
+          (click)="run(command)"
+          (pointermove)="activeIndex.set(i)"
+        >
+          <app-icon [name]="command.icon" />
+          <span class="palette__label">{{ command.label }}</span>
+          <span class="palette__group">{{ command.group }}</span>
+        </li>
+      } @empty {
+        <li class="palette__empty" role="presentation">No matching commands</li>
+      }
+    </ul>
+
+    <p class="palette__hint" aria-hidden="true">
+      <span><kbd class="key">↑</kbd> <kbd class="key">↓</kbd> navigate</span>
+      <span><kbd class="key">↵</kbd> run</span>
+      <span><kbd class="key">Esc</kbd> close</span>
+    </p>
+  </div>
+</dialog>

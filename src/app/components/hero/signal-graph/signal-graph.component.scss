@@ -1,0 +1,121 @@
+:host {
+  display: block;
+}
+
+.graph {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  font-family: var(--font-mono);
+}
+
+.graph__header {
+  fill: var(--syntax-comment);
+  font-size: 0.85em;
+}
+
+.graph__wire {
+  fill: none;
+  stroke: var(--color-border-strong);
+  stroke-width: 1.25;
+  opacity: 0.6;
+  transition:
+    stroke 0.3s ease,
+    opacity 0.3s ease,
+    stroke-width 0.3s ease;
+
+  &.is-lit {
+    stroke: var(--color-accent);
+    stroke-width: 1.75;
+    opacity: 1;
+  }
+}
+
+.graph__node {
+  cursor: crosshair;
+}
+
+.graph__box {
+  fill: var(--color-surface-2);
+  stroke: var(--color-border-strong);
+  stroke-width: 1;
+  transition:
+    stroke 0.3s ease,
+    fill 0.3s ease;
+}
+
+.graph__flash {
+  fill: var(--color-accent-subtle);
+  stroke: var(--color-accent);
+  stroke-width: 1.5;
+  opacity: 0;
+  pointer-events: none;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.graph__label {
+  fill: var(--color-text);
+  pointer-events: none;
+}
+
+[data-kind='computed'] .graph__box {
+  stroke: var(--color-accent);
+  stroke-dasharray: 3 2;
+}
+
+[data-kind='effect'] {
+  .graph__box {
+    fill: var(--color-accent);
+    stroke: var(--color-accent);
+  }
+
+  .graph__label {
+    fill: var(--color-on-accent);
+    font-weight: 600;
+  }
+}
+
+.graph__node.is-lit .graph__box {
+  stroke: var(--color-accent);
+  stroke-dasharray: none;
+}
+
+.graph__node.is-lit:not([data-kind='effect']) .graph__box {
+  fill: color-mix(in srgb, var(--color-accent) 16%, var(--color-surface-2));
+}
+
+.graph__output {
+  fill: var(--color-text-muted);
+  font-size: 0.9em;
+}
+
+// Entrance: nodes fade up in order, then the wires draw themselves in.
+@media (prefers-reduced-motion: no-preference) {
+  .graph__header,
+  .graph__node,
+  .graph__output {
+    animation: graph-fade 0.6s var(--ease-out) both;
+    animation-delay: calc(1100ms + var(--i, 0) * 55ms);
+  }
+
+  .graph__wire {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: wire-draw 1.4s var(--ease-out) forwards;
+    animation-delay: calc(1500ms + var(--i) * 70ms);
+  }
+
+  @keyframes graph-fade {
+    from {
+      opacity: 0;
+    }
+  }
+
+  @keyframes wire-draw {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+}

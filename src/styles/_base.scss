@@ -1,0 +1,106 @@
+@use 'breakpoints' as bp;
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  // Keeps anchor targets clear of the sticky header.
+  scroll-padding-top: calc(var(--header-height) + var(--space-4));
+  scroll-padding-bottom: var(--status-height);
+}
+
+// The status bar is shown from md up (see StatusBarComponent).
+:root {
+  @include bp.up(md) {
+    --status-height: 1.75rem;
+  }
+}
+
+body {
+  margin: 0;
+  min-width: 20rem;
+  padding-bottom: var(--status-height);
+  overflow-x: clip;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: 1.7;
+  font-feature-settings: 'ss01', 'cv11';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+ol,
+ul,
+dl,
+dd,
+figure {
+  margin: 0;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+ol,
+ul {
+  padding: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.22em;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+kbd,
+code {
+  font-family: var(--font-mono);
+}
+
+svg {
+  display: block;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
+// Programmatic focus targets (e.g. <main> after the skip link) don't need a ring.
+[tabindex='-1']:focus {
+  outline: none;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+}

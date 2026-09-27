@@ -1,0 +1,260 @@
+@use 'breakpoints' as bp;
+
+// The host (not the <header>) is sticky: a sticky element only sticks within
+// its parent, and the host is exactly as tall as the header.
+:host {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: block;
+}
+
+.site-header {
+  position: relative;
+  border-bottom: 1px solid transparent;
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease;
+
+  &.is-scrolled {
+    border-bottom-color: var(--color-border);
+    background: color-mix(in srgb, var(--color-bg) 82%, transparent);
+    backdrop-filter: blur(14px) saturate(140%);
+  }
+}
+
+// Reading progress along the bottom edge — pure CSS where scroll timelines
+// are supported; elsewhere it simply isn't shown.
+.site-header__progress {
+  position: absolute;
+  right: 0;
+  bottom: -1px;
+  left: 0;
+  height: 1px;
+  background: var(--color-accent);
+  transform: scaleX(0);
+  transform-origin: left;
+
+  @supports (animation-timeline: scroll()) {
+    animation: read-progress linear both;
+    animation-timeline: scroll(root block);
+  }
+}
+
+@keyframes read-progress {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.site-header__inner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  height: var(--header-height);
+}
+
+.brand {
+  margin-right: auto;
+  padding-block: var(--space-2);
+  font-size: var(--text-base);
+  font-weight: 650;
+  letter-spacing: -0.03em;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.brand__prompt {
+  margin-right: 0.1em;
+  font-family: var(--font-mono);
+  font-weight: 400;
+  color: var(--color-accent);
+}
+
+// ── Navigation: disclosure on small screens, inline from lg ────────────────
+
+.nav__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 2.75rem;
+  padding-inline: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: transparent;
+  font-size: var(--text-sm);
+  font-weight: 500;
+
+  &:hover {
+    border-color: var(--color-border-strong);
+  }
+
+  @include bp.up(lg) {
+    display: none;
+  }
+}
+
+.nav__panel {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  left: 0;
+  display: grid;
+  gap: var(--space-4);
+  padding: var(--space-2) var(--gutter) var(--space-5);
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-bg);
+  // `visibility` removes closed links from the tab order and accessibility tree.
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(-0.5rem);
+  transition:
+    opacity var(--duration-fast) ease,
+    transform var(--duration-fast) ease,
+    visibility 0s linear var(--duration-fast);
+
+  &.is-open {
+    visibility: visible;
+    opacity: 1;
+    transform: none;
+    transition-delay: 0s;
+  }
+
+  @include bp.up(lg) {
+    position: static;
+    display: block;
+    padding: 0;
+    border: 0;
+    background: none;
+    visibility: visible;
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+.nav__list {
+  display: grid;
+  list-style: none;
+
+  > li + li {
+    border-top: 1px solid var(--color-border);
+  }
+
+  @include bp.up(lg) {
+    display: flex;
+    gap: var(--space-1);
+
+    > li + li {
+      border-top: 0;
+    }
+  }
+}
+
+.nav__link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 3rem;
+  padding-inline: var(--space-4);
+  border-left: 2px solid transparent;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  transition: color var(--duration-fast) ease;
+
+  &:hover {
+    color: var(--color-text);
+  }
+
+  // Current section: colour *and* a bar, so it never relies on colour alone.
+  &[aria-current] {
+    color: var(--color-text);
+    border-left-color: var(--color-accent);
+  }
+
+  @include bp.up(lg) {
+    min-height: 2.75rem;
+    padding-inline: var(--space-3);
+    border-left: 0;
+    font-size: var(--text-sm);
+
+    &::after {
+      content: '';
+      position: absolute;
+      right: var(--space-3);
+      bottom: 0.45rem;
+      left: var(--space-3);
+      height: 2px;
+      background: var(--color-accent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform var(--duration-fast) ease;
+    }
+
+    &[aria-current]::after {
+      transform: scaleX(1);
+    }
+  }
+}
+
+.nav__utilities {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+
+  @include bp.up(lg) {
+    display: none;
+  }
+}
+
+.nav__utility {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 2.75rem;
+  padding-inline: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: transparent;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+
+  &:hover {
+    border-color: var(--color-border-strong);
+  }
+}
+
+// ── Command palette trigger (wide screens) ─────────────────────────────────
+
+.palette-trigger {
+  display: none;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 2.5rem;
+  margin-left: var(--space-3);
+  padding: 0 var(--space-2) 0 var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--color-surface) 70%, transparent);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+
+  &:hover {
+    border-color: var(--color-border-strong);
+    color: var(--color-text);
+  }
+
+  @include bp.up(lg) {
+    display: inline-flex;
+  }
+}
+
+.palette-trigger__label {
+  margin-right: var(--space-4);
+}
+
+.theme-toggle {
+  @include bp.up(lg) {
+    margin-left: var(--space-1);
+  }
+}

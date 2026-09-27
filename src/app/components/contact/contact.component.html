@@ -1,0 +1,53 @@
+<section id="contact" class="section contact" aria-labelledby="contact-title">
+  <div class="container">
+    <app-section-header index="06" title="Contact" titleId="contact-title" selector="app-contact" />
+
+    <div class="contact__grid">
+      <div class="contact__lead" appReveal>
+        <p class="contact__statement">Get in touch<span class="contact__dot">.</span></p>
+        <p class="contact__where">
+          <app-icon name="pin" />
+          Based in {{ location }}
+        </p>
+        <p class="contact__where">
+          <app-icon name="clock" />
+          <span>Local time <time class="contact__time">{{ localTime() }}</time></span>
+        </p>
+        <div class="contact__actions no-print">
+          <a class="button button--primary" [href]="email.href" appMagnetic>
+            <app-icon name="email" />
+            Email me
+          </a>
+          <button type="button" class="button button--secondary" (click)="copyEmail()">
+            <app-icon name="copy" />
+            Copy address
+          </button>
+        </div>
+      </div>
+
+      <app-window class="terminal" title="zsh — contact" appReveal [appRevealDelay]="120">
+        <div class="terminal__body">
+        <dl class="terminal__list">
+          @for (method of methods; track method.kind) {
+            <div class="terminal__entry">
+              <dt class="terminal__command">
+                <span class="terminal__prompt" aria-hidden="true">~ $</span>
+                <span aria-hidden="true">{{ method.command }}</span>
+                <span class="visually-hidden">{{ method.label }}</span>
+              </dt>
+              <dd class="terminal__output">
+                <app-icon [name]="method.kind" />
+                <a class="text-link" [href]="method.href">{{ method.value }}</a>
+              </dd>
+            </div>
+          }
+        </dl>
+        <p class="terminal__command" aria-hidden="true">
+          <span class="terminal__prompt">~ $</span>
+          <span class="terminal__caret loop"></span>
+        </p>
+        </div>
+      </app-window>
+    </div>
+  </div>
+</section>

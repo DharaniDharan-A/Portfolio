@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Dharani Dharan Arunkumar — AI-Augmented Full Stack Developer (Angular &amp; .NET)</title>
+    <meta
+      name="description"
+      content="Dharani Dharan Arunkumar — full stack developer with 4+ years at Ducen, an Orion Innovation Company. Angular and .NET, with AI engineering as a differentiator. Based in Chennai, India."
+    />
+    <meta name="author" content="Dharani Dharan Arunkumar" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark light" />
+    <!-- Updated at runtime by ThemeService to match the active theme. -->
+    <meta name="theme-color" content="#0b0f19" />
+    <base href="/" />
+
+    <!-- TODO: Replace with final portfolio domain, then uncomment. -->
+    <!-- <link rel="canonical" href="https://YOUR-DOMAIN/" /> -->
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="profile" />
+    <meta property="og:title" content="Dharani Dharan Arunkumar — AI-Augmented Full Stack Developer" />
+    <meta
+      property="og:description"
+      content="Full stack developer with 4+ years at Ducen, an Orion Innovation Company. Angular and .NET, with AI engineering as a differentiator."
+    />
+    <meta property="og:site_name" content="Dharani Dharan Arunkumar" />
+    <meta property="og:locale" content="en_IN" />
+    <meta property="profile:first_name" content="Dharani Dharan" />
+    <meta property="profile:last_name" content="Arunkumar" />
+    <!-- TODO: Replace with final portfolio domain, then uncomment. -->
+    <!-- <meta property="og:url" content="https://YOUR-DOMAIN/" /> -->
+    <!-- TODO: Add a 1200×630 Open Graph image (e.g. public/og-image.png), then uncomment with its absolute URL. -->
+    <!-- <meta property="og:image" content="https://YOUR-DOMAIN/og-image.png" /> -->
+    <!-- <meta property="og:image:alt" content="Dharani Dharan Arunkumar — AI-Augmented Full Stack Developer" /> -->
+
+    <!-- Twitter / X -->
+    <!-- TODO: Switch to "summary_large_image" once the OG image above exists. -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Dharani Dharan Arunkumar — AI-Augmented Full Stack Developer" />
+    <meta
+      name="twitter:description"
+      content="Full stack developer with 4+ years at Ducen, an Orion Innovation Company. Angular and .NET, with AI engineering as a differentiator."
+    />
+    <!-- <meta name="twitter:image" content="https://YOUR-DOMAIN/og-image.png" /> -->
+
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+
+    <!-- Fonts: Geist (UI, body, display) and Geist Mono (code, labels, metadata). -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@300..800&family=Geist+Mono:wght@400..600&display=swap"
+    />
+
+    <!--
+      Apply theme and motion preferences before first paint, so there's no flash
+      of the wrong theme and no animation that starts only to be paused.
+        theme:  saved choice → OS preference (only if it explicitly asks for light) → dark
+        motion: saved choice → paused if the OS asks for reduced motion → playing
+      ThemeService and MotionService adopt these attributes; keep the keys in sync.
+    -->
+    <script>
+      (function () {
+        var root = document.documentElement;
+        function saved(key) {
+          try {
+            return localStorage.getItem(key);
+          } catch (e) {
+            return null;
+          }
+        }
+        function prefers(query) {
+          return !!window.matchMedia && window.matchMedia(query).matches;
+        }
+        var theme = saved('theme');
+        root.setAttribute(
+          'data-theme',
+          theme === 'light' || theme === 'dark' ? theme : prefers('(prefers-color-scheme: light)') ? 'light' : 'dark'
+        );
+        var motion = saved('motion');
+        root.setAttribute(
+          'data-motion',
+          motion === 'playing' || motion === 'paused' ? motion : prefers('(prefers-reduced-motion: reduce)') ? 'paused' : 'playing'
+        );
+      })();
+    </script>
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Dharani Dharan Arunkumar",
+        "jobTitle": "AI-Augmented Full Stack Developer",
+        "worksFor": { "@type": "Organization", "name": "Ducen — an Orion Innovation Company" },
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Chennai",
+          "addressRegion": "Tamil Nadu",
+          "addressCountry": "IN"
+        },
+        "email": "mailto:dharanidharan.arunkumar@gmail.com",
+        "sameAs": [
+          "https://www.linkedin.com/in/dharani-dharan-arunkumar-6b0464276",
+          "https://github.com/DharaniDharan-A"
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <app-root></app-root>
+    <noscript>
+      <p style="padding: 1.5rem; font-family: system-ui, sans-serif">
+        This portfolio needs JavaScript to render. You can reach Dharani Dharan Arunkumar at
+        <a href="mailto:dharanidharan.arunkumar@gmail.com">dharanidharan.arunkumar@gmail.com</a>.
+      </p>
+    </noscript>
+  </body>
+</html>

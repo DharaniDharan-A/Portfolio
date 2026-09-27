@@ -1,0 +1,97 @@
+<section #section id="top" class="hero" aria-labelledby="hero-title">
+  <div class="hero__backdrop" aria-hidden="true"></div>
+
+  <div class="container">
+    <p class="hero__status">
+      <span class="hero__dot loop" aria-hidden="true"></span>
+      {{ status }}
+    </p>
+
+    <h1 id="hero-title" class="hero__name">
+      <span class="visually-hidden">{{ profile.name }}</span>
+      <span class="hero__name-visual" aria-hidden="true">
+        @for (line of nameLines; track $index; let last = $last) {
+          <span class="name-line">
+            <!-- &ngsp; keeps a real space between words; Angular strips plain whitespace here. -->
+            @for (word of line.words; track $index; let lastWord = $last) {
+              <span class="name-word">
+                @for (letter of word.letters; track letter.index) {
+                  <span class="name-letter" [style.--i]="letter.index">{{ letter.char }}</span>
+                }
+              </span>
+              @if (!lastWord) {
+                &ngsp;
+              }
+            }
+            @if (last) {
+              <span class="hero__caret loop"></span>
+            }
+          </span>
+        }
+      </span>
+    </h1>
+
+    <div class="hero__intro">
+      <div>
+        <p class="hero__headline">{{ profile.headline }}</p>
+        <p class="hero__summary">{{ profile.summary }}</p>
+      </div>
+
+      <div class="hero__side">
+        <div class="hero__actions no-print">
+          <a class="button button--primary" href="#contact" appMagnetic>
+            Get in touch
+            <app-icon name="arrow-right" />
+          </a>
+          <a
+            class="button button--secondary"
+            [href]="profile.resumeUrl"
+            download="Dharani-Dharan-Arunkumar-Resume.pdf"
+            type="application/pdf"
+          >
+            Download résumé
+            <span class="button__meta">PDF</span>
+            <app-icon name="download" />
+          </a>
+        </div>
+
+        <ul class="hero__credentials" role="list" aria-label="Certifications">
+          @for (credential of profile.credentials; track credential) {
+            <li>
+              <app-icon name="check" />
+              {{ credential }}
+            </li>
+          }
+        </ul>
+
+        <p class="hero__location">
+          <app-icon name="pin" />
+          {{ profile.location }}
+        </p>
+      </div>
+    </div>
+
+    <div class="hero__ide no-print" appScrollProgress="enter">
+      <app-window class="ide" title="portfolio — src/app/developer.component.ts">
+        <div class="ide__panes">
+          <div class="ide__pane">
+            <p class="ide__tab" aria-hidden="true">
+              <app-icon name="file" />
+              developer.component.ts
+            </p>
+            <app-code-editor [lines]="code" [caretLine]="caretLine" [label]="codeLabel" />
+          </div>
+
+          <div class="ide__pane ide__pane--graph">
+            <p class="ide__tab" aria-hidden="true">
+              <span class="ide__live loop"></span>
+              Signal graph
+              <span class="ide__hint">hover a node</span>
+            </p>
+            <app-signal-graph />
+          </div>
+        </div>
+      </app-window>
+    </div>
+  </div>
+</section>

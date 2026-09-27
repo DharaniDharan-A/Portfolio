@@ -1,0 +1,9 @@
+// Global styles. Partials live in src/styles/ (also on the Sass load path, so
+// component stylesheets can `@use 'breakpoints' as bp;`).
+@use 'styles/tokens';
+@use 'styles/base';
+@use 'styles/layout';
+@use 'styles/components';
+@use 'styles/effects';
+@use 'styles/motion';
+@use 'styles/print';

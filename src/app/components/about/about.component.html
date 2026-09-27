@@ -1,0 +1,43 @@
+<section id="about" class="section" aria-labelledby="about-title">
+  <div class="container">
+    <app-section-header index="01" title="About" titleId="about-title" selector="app-about" />
+
+    <!-- Screen readers get the sentence whole; the split words are visual only. -->
+    <p class="statement" appScrollProgress="pass" [style.--n]="words.length">
+      <span class="visually-hidden">{{ statement }}</span>
+      <span aria-hidden="true">
+        @for (word of words; track $index; let i = $index; let last = $last) {
+          <span class="statement__word" [class.is-accent]="word.accent" [style.--i]="i">{{
+            word.text + (last ? '' : ' ')
+          }}</span>
+        }
+      </span>
+    </p>
+
+    <div class="about">
+      <div class="prose about__prose" appReveal>
+        @for (paragraph of paragraphs; track $index) {
+          <p>{{ paragraph }}</p>
+        }
+      </div>
+
+      <app-window
+        class="about__facts"
+        title="profile.yml"
+        appReveal
+        [appRevealDelay]="120"
+        role="group"
+        aria-label="Profile facts"
+      >
+        <dl class="yaml">
+          @for (fact of facts; track fact.key) {
+            <div class="yaml__row">
+              <dt class="yaml__key">{{ fact.key }}</dt>
+              <dd class="yaml__value">{{ fact.value }}</dd>
+            </div>
+          }
+        </dl>
+      </app-window>
+    </div>
+  </div>
+</section>

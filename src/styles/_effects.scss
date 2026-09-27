@@ -1,0 +1,30 @@
+// Page-wide atmosphere. Both layers are decorative and ignore the pointer.
+
+// Soft light that follows the cursor across the page background. Positioned by
+// AppComponent; only shown on devices with a fine pointer.
+.cursor-glow {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(
+    650px circle at var(--cursor-x, 50%) var(--cursor-y, -50%),
+    var(--glow-cursor),
+    transparent 60%
+  );
+
+  @media not ((hover: hover) and (pointer: fine)) {
+    display: none;
+  }
+}
+
+// Film grain over everything, for a little tactility. Static: rendered once.
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: 150;
+  pointer-events: none;
+  opacity: var(--grain-opacity);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0.9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+}

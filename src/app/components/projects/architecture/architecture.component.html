@@ -1,0 +1,58 @@
+<figure class="arch" aria-labelledby="arch-caption">
+  <figcaption id="arch-caption" class="comment arch__caption">schematic, by layer</figcaption>
+
+  <p class="arch__clients">{{ clients() }}</p>
+
+  @for (tier of tiers(); track tier.layer) {
+    <div class="arch__link" aria-hidden="true">
+      <span class="arch__wire loop">
+        <span class="arch__packet arch__packet--down"></span>
+        <span class="arch__packet arch__packet--up"></span>
+      </span>
+      @if (tier.link) {
+        <span class="arch__link-label">{{ tier.link }}</span>
+      }
+    </div>
+
+    <div class="arch__tier" [class.arch__tier--storage]="tier.kind === 'storage'">
+      <p class="arch__tier-name">{{ tier.layer }}</p>
+      <div class="arch__tier-body">
+        @if (tier.kind === 'storage') {
+          <ul class="arch__stores" role="list">
+            @for (item of tier.items; track item) {
+              <li class="store">{{ item }}</li>
+            }
+          </ul>
+        } @else {
+          <ul class="chip-list" role="list">
+            @for (item of tier.items; track item) {
+              <li class="chip">{{ item }}</li>
+            }
+          </ul>
+        }
+        @if (tier.notes?.length) {
+          <ul class="arch__notes" role="list">
+            @for (note of tier.notes; track note) {
+              <li>{{ note }}</li>
+            }
+          </ul>
+        }
+      </div>
+    </div>
+  }
+
+  @if (delivery(); as pipeline) {
+    <div class="arch__delivery">
+      <p class="arch__tier-name">{{ pipeline.layer }}</p>
+      <ul class="chip-list" role="list">
+        @for (item of pipeline.items; track item) {
+          <li class="chip">{{ item }}</li>
+        }
+      </ul>
+      @for (note of pipeline.notes; track note) {
+        <span class="arch__delivery-note">{{ note }}</span>
+      }
+      <span class="arch__build loop" aria-hidden="true"></span>
+    </div>
+  }
+</figure>

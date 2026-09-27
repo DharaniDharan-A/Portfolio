@@ -1,0 +1,91 @@
+<section id="skills" class="section" aria-labelledby="skills-title">
+  <div class="container">
+    <app-section-header index="04" title="Skills" titleId="skills-title" selector="app-skills">
+      <p class="section__intro">
+        Pick a skill to find every place it shows up in the work above — the portfolio's own
+        "Find All References".
+      </p>
+    </app-section-header>
+
+    <div class="skills" appReveal>
+      <!-- Explorer: every skill, grouped -->
+      <app-window class="explorer" title="explorer — skills" role="group" aria-label="Skills">
+        <div class="explorer__groups">
+          @for (group of groups; track group.name; let g = $index) {
+            <div class="explorer__group">
+              <h3 class="explorer__heading" [id]="'skill-group-' + g">
+                <app-icon name="folder" />
+                {{ group.name }}
+              </h3>
+              <ul class="explorer__list" role="list" [attr.aria-labelledby]="'skill-group-' + g">
+                @for (skill of group.skills; track skill.name) {
+                  @let count = countFor(skill);
+                  <li>
+                    <button
+                      type="button"
+                      class="skill"
+                      [attr.aria-pressed]="selected() === skill"
+                      (click)="selected.set(skill)"
+                    >
+                      <span class="skill__name">{{ skill.name }}</span>
+                      @if (count) {
+                        <span class="skill__count">
+                          {{ count }}<span class="visually-hidden">
+                            {{ count === 1 ? 'reference' : 'references' }}</span
+                          >
+                        </span>
+                      }
+                    </button>
+                  </li>
+                }
+              </ul>
+            </div>
+          }
+        </div>
+      </app-window>
+
+      <!-- References for the selected skill -->
+      <app-window class="references" title="references" role="region" aria-label="References">
+        <div class="references__body" aria-live="polite">
+          <p class="references__summary">
+            <span class="references__term">'{{ selected().name }}'</span>
+            @if (snippetCount()) {
+              — {{ snippetCount() }} {{ snippetCount() === 1 ? 'reference' : 'references' }} in
+              {{ references().length }} {{ references().length === 1 ? 'place' : 'places' }}
+            } @else {
+              — no references in the work above
+            }
+          </p>
+
+          @if (references().length) {
+            <ul class="references__list" role="list">
+              @for (reference of references(); track reference.label) {
+                <li class="reference">
+                  <a class="reference__source" [href]="reference.href">
+                    <app-icon name="chevron-right" />
+                    {{ reference.label }}
+                  </a>
+                  <ul class="reference__snippets" role="list">
+                    @for (snippet of reference.snippets; track $index) {
+                      <li class="snippet">
+                        <span class="snippet__kind">{{ snippet.kind }}</span>
+                        <span class="snippet__text"
+                          >{{ snippet.before }}<mark>{{ snippet.match }}</mark
+                          >{{ snippet.after }}</span
+                        >
+                      </li>
+                    }
+                  </ul>
+                </li>
+              }
+            </ul>
+          } @else {
+            <p class="references__empty">
+              Listed as a skill; not referenced in the experience or projects on this page.
+            </p>
+          }
+        </div>
+      </app-window>
+    </div>
+  </div>
+</section>

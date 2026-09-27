@@ -1,0 +1,79 @@
+<section id="recognition" class="section" aria-labelledby="recognition-title">
+  <div class="container">
+    <app-section-header
+      index="05"
+      title="Recognition"
+      titleId="recognition-title"
+      selector="app-recognition"
+    />
+
+    <div class="recognition">
+      <!-- Certifications, presented as a passing test run -->
+      <div appReveal>
+        <h3 class="comment recognition__heading">Certifications</h3>
+        <app-window title="terminal — npm test" class="runner">
+          <div class="runner__body">
+            <p class="runner__command" aria-hidden="true">
+              <span class="runner__prompt">$</span> npm test -- certifications
+            </p>
+            <p class="runner__suite" aria-hidden="true">
+              <span class="runner__pass">PASS</span> certifications.spec.ts
+            </p>
+            <ul class="runner__tests" role="list">
+              @for (cert of certifications; track cert.name; let i = $index) {
+                <li class="test" [style.--i]="i">
+                  <app-icon name="check" />
+                  <span class="test__name">{{ cert.name }}</span>
+                  @if (cert.issuer || cert.date) {
+                    <span class="test__meta">
+                      {{ cert.issuer }}
+                      @if (cert.issuer && cert.date) {
+                        ·
+                      }
+                      @if (cert.date) {
+                        <time [attr.datetime]="cert.date">{{ cert.date | date: 'MMM y' }}</time>
+                      }
+                    </span>
+                  }
+                </li>
+              }
+              @if (notShown > 0) {
+                <li class="test test--more" [style.--i]="certifications.length">
+                  <span class="test__skip" aria-hidden="true">○</span>
+                  <span class="test__name">{{ notShown }} more not listed here</span>
+                </li>
+              }
+            </ul>
+            <p class="runner__summary">
+              <span class="visually-hidden">{{ total }} certifications in total.</span>
+              <span aria-hidden="true">
+                <span class="runner__label">Tests:</span>&ngsp;<span class="runner__passed"
+                  >{{ total }} passed</span
+                >, {{ total }} total
+              </span>
+            </p>
+          </div>
+        </app-window>
+      </div>
+
+      <!-- Awards, as README badges -->
+      <div appReveal [appRevealDelay]="120">
+        <h3 class="comment recognition__heading">Awards</h3>
+        <ul class="badges" role="list">
+          @for (award of awards; track award.name) {
+            <li class="badge">
+              <span class="badge__left">
+                <app-icon name="award" />
+                {{ award.name }}
+              </span>
+              <span class="badge__right">
+                {{ award.issuer }} ·
+                <time [attr.datetime]="award.date">{{ award.date | date: 'MMM y' }}</time>
+              </span>
+            </li>
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>

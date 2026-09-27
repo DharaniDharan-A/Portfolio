@@ -1,0 +1,207 @@
+@use 'breakpoints' as bp;
+
+// ── Case study ─────────────────────────────────────────────────────────────
+
+.case {
+  position: relative;
+}
+
+.case__header {
+  display: grid;
+  gap: var(--space-3);
+  max-width: 58rem;
+}
+
+.case__context {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+  align-items: baseline;
+}
+
+.case__period {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+.case__title {
+  font-size: clamp(3.5rem, 1rem + 11vw, 11rem);
+  font-weight: 700;
+  line-height: 0.85;
+  letter-spacing: -0.07em;
+  // A faint echo of the accent through the title.
+  background: linear-gradient(
+    100deg,
+    var(--color-text) 30%,
+    color-mix(in srgb, var(--color-accent) 70%, var(--color-text)) 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.case__tagline {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-accent);
+}
+
+.case__summary {
+  max-width: 52ch;
+  margin-top: var(--space-2);
+  font-size: var(--text-xl);
+  line-height: 1.45;
+  letter-spacing: -0.015em;
+}
+
+.case__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-8);
+  margin-top: var(--space-8);
+
+  @include bp.up(lg) {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    align-items: start;
+  }
+}
+
+.work {
+  display: grid;
+  margin-top: var(--space-4);
+  list-style: none;
+  border-top: 1px solid var(--color-border);
+}
+
+.work__item {
+  display: grid;
+  grid-template-columns: 2.25rem minmax(0, 1fr);
+  padding-block: var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.work__index {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  line-height: 2.1;
+  color: var(--color-accent);
+}
+
+.case__pipeline {
+  margin-top: var(--space-8);
+}
+
+// ── Personal projects ──────────────────────────────────────────────────────
+
+.personal {
+  margin-top: clamp(6rem, 4rem + 8vw, 11rem);
+}
+
+.personal__title {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  margin-bottom: var(--space-7);
+  font-size: var(--text-3xl);
+  letter-spacing: -0.05em;
+}
+
+.personal__count {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--color-accent);
+}
+
+.project {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-7);
+  padding-block: var(--space-8);
+  border-top: 1px solid var(--color-border);
+
+  @include bp.up(lg) {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    gap: var(--space-8);
+    align-items: start;
+  }
+}
+
+.project__index {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--syntax-comment);
+}
+
+.project__title {
+  margin-top: var(--space-2);
+  font-size: var(--text-2xl);
+  letter-spacing: -0.04em;
+}
+
+.project__summary {
+  margin-top: var(--space-3);
+  color: var(--color-text-muted);
+}
+
+.project__note {
+  margin-top: var(--space-5);
+  padding-left: var(--space-4);
+  border-left: 2px solid var(--color-accent);
+  font-size: var(--text-lg);
+  font-weight: 500;
+  line-height: 1.45;
+  letter-spacing: -0.015em;
+}
+
+.project__caption {
+  margin-top: var(--space-6);
+  margin-bottom: var(--space-3);
+}
+
+.project__links {
+  margin-top: var(--space-5);
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+}
+
+// The demo stays in view while the (longer) text column scrolls past.
+.project__demo {
+  @include bp.up(lg) {
+    position: sticky;
+    top: calc(var(--header-height) + var(--space-6));
+  }
+}
+
+@media print {
+  .case__title {
+    background: none;
+    color: inherit;
+  }
+
+  .case__body,
+  .case__pipeline {
+    margin-top: var(--space-4);
+  }
+
+  .case__pipeline,
+  .project__demo {
+    display: none;
+  }
+
+  .personal {
+    margin-top: var(--space-5);
+  }
+
+  .project {
+    display: block;
+    padding-block: var(--space-4);
+    break-inside: avoid;
+  }
+}

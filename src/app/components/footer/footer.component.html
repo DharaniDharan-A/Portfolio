@@ -1,0 +1,33 @@
+<footer class="site-footer">
+  <div class="container">
+    <div class="site-footer__inner">
+      <div class="site-footer__about">
+        <p>© {{ year }} {{ name }}</p>
+        <p class="site-footer__built">
+          Built with Angular 21 — standalone components, signals, zoneless change detection,
+          OnPush everywhere. No UI, icon or animation libraries.
+        </p>
+      </div>
+
+      <div class="site-footer__actions no-print">
+        <button
+          type="button"
+          class="site-footer__button"
+          [attr.aria-pressed]="inspector.enabled()"
+          (click)="inspector.toggle()"
+        >
+          <app-icon name="inspect" />
+          Inspect components
+        </button>
+        <button type="button" class="site-footer__button" (click)="motion.toggle()">
+          <app-icon [name]="motion.playing() ? 'pause' : 'play'" />
+          {{ motion.playing() ? 'Pause animations' : 'Play animations' }}
+        </button>
+        <a class="site-footer__button" href="#top">
+          <app-icon name="arrow-up" />
+          Back to top
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>

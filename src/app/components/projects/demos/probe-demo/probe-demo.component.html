@@ -1,0 +1,61 @@
+<app-window
+  title="api-health-monitor — probes.demo"
+  tag="simulated"
+  role="group"
+  aria-label="API Health Monitor probes, simulated with made-up endpoints"
+>
+  <div class="demo probes">
+    <ul class="endpoints" role="list">
+      @for (endpoint of endpoints; track endpoint.name; let i = $index) {
+        @let outcome = latest()[i];
+        <li class="endpoint" [attr.data-status]="outcome?.kind ?? 'idle'">
+          <span
+            class="endpoint__radar loop"
+            aria-hidden="true"
+            [style.--interval]="endpoint.interval + 'ms'"
+          ></span>
+          <span class="endpoint__name">{{ endpoint.name }}</span>
+          <span class="endpoint__status">
+            @if (outcome) {
+              <app-icon [name]="outcome.kind === 'ok' ? 'check' : 'cross'" />
+              {{ outcome.label }}
+            } @else {
+              {{ running() ? 'probing…' : 'paused' }}
+            }
+          </span>
+        </li>
+      }
+    </ul>
+
+    <div class="log">
+      <p class="log__title">
+        <span>probe log</span>
+        <span class="log__legend">every result recorded · failures classified</span>
+      </p>
+      <ol class="log__entries" role="list">
+        @for (entry of log(); track entry.id) {
+          <li class="log__entry" [attr.data-status]="entry.outcome.kind">
+            <span class="log__time">{{ entry.time }}</span>
+            <span class="log__endpoint">{{ entry.endpoint }}</span>
+            <span class="log__result">{{ entry.outcome.label }}</span>
+            @if (entry.outcome.kind === 'ok') {
+              <span class="log__latency" aria-hidden="true">
+                <span [style.--w]="entry.latency"></span>
+              </span>
+            }
+          </li>
+        } @empty {
+          <li class="log__empty">
+            {{ running() ? 'Waiting for the first probe…' : 'Animations are paused.' }}
+          </li>
+        }
+      </ol>
+    </div>
+
+    <p class="secret">
+      <app-icon name="lock" />
+      <span class="secret__key">Authorization: <span aria-hidden="true">••••••••••••</span></span>
+      <span class="secret__note">encrypted at rest · never returned</span>
+    </p>
+  </div>
+</app-window>

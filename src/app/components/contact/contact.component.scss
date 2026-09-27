@@ -1,0 +1,141 @@
+@use 'breakpoints' as bp;
+
+// As the last section, Contact needs enough height to reach the scroll-spy band
+// (30% down the viewport) when the page is scrolled to the very bottom.
+.contact {
+  min-height: 80vh;
+  min-height: 80svh;
+  padding-bottom: var(--space-9);
+}
+
+.contact__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-7);
+
+  @include bp.up(lg) {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: var(--space-8);
+    align-items: center;
+  }
+}
+
+.contact__lead {
+  display: grid;
+  gap: var(--space-3);
+  justify-items: start;
+}
+
+.contact__statement {
+  margin-bottom: var(--space-3);
+  font-size: var(--text-3xl);
+  font-weight: 650;
+  line-height: 1;
+  letter-spacing: -0.05em;
+}
+
+.contact__dot {
+  color: var(--color-accent);
+}
+
+.contact__where {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+.contact__time {
+  color: var(--color-text);
+}
+
+.contact__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+}
+
+// ── Terminal ───────────────────────────────────────────────────────────────
+
+.terminal__body,
+.terminal__list {
+  display: grid;
+  gap: var(--space-4);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+}
+
+.terminal__body {
+  padding: var(--space-5);
+}
+
+.terminal__command {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--color-text-muted);
+}
+
+.terminal__prompt {
+  color: var(--color-success);
+}
+
+.terminal__output {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: 0.2rem;
+  padding-left: var(--space-5);
+  font-size: var(--text-sm);
+
+  app-icon {
+    flex-shrink: 0;
+    color: var(--color-accent);
+  }
+
+  a {
+    // The LinkedIn URL must wrap rather than overflow at 360px.
+    overflow-wrap: anywhere;
+    padding-block: 0.2rem;
+  }
+}
+
+.terminal__caret {
+  display: inline-block;
+  width: 0.55rem;
+  height: 1em;
+  background: var(--color-accent);
+  animation: caret-blink 1.1s steps(1) infinite;
+}
+
+@keyframes caret-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@media print {
+  .contact {
+    min-height: 0;
+    padding-bottom: 0;
+  }
+
+  .contact__statement {
+    display: none;
+  }
+
+  .terminal__body {
+    padding: 0;
+  }
+
+  .terminal__command {
+    display: none;
+  }
+
+  .terminal__output {
+    padding-left: 0;
+  }
+}

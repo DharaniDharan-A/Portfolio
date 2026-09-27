@@ -1,0 +1,176 @@
+@use 'breakpoints' as bp;
+
+.recognition {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-8);
+
+  @include bp.up(lg) {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    align-items: start;
+  }
+}
+
+.recognition__heading {
+  margin-bottom: var(--space-4);
+}
+
+// ── Test runner ────────────────────────────────────────────────────────────
+
+.runner__body {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+}
+
+.runner__command {
+  color: var(--color-text-muted);
+}
+
+.runner__prompt {
+  color: var(--color-accent);
+}
+
+.runner__pass {
+  margin-right: var(--space-2);
+  padding: 0 0.4rem;
+  border-radius: var(--radius-sm);
+  background: var(--color-success);
+  font-weight: 600;
+  color: var(--color-bg);
+}
+
+.runner__tests {
+  display: grid;
+  gap: var(--space-2);
+  padding-left: var(--space-3);
+  list-style: none;
+}
+
+.test {
+  display: grid;
+  grid-template-columns: 1.25rem minmax(0, 1fr);
+  column-gap: var(--space-2);
+  align-items: baseline;
+
+  app-icon {
+    position: relative;
+    top: 0.2em;
+    color: var(--color-success);
+  }
+}
+
+.test__name {
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.test__meta {
+  grid-column: 2;
+  color: var(--color-text-muted);
+}
+
+.test__skip {
+  text-align: center;
+  color: var(--syntax-comment);
+}
+
+.test--more .test__name {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 400;
+  color: var(--color-text-muted);
+}
+
+.runner__summary {
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+}
+
+.runner__label {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.runner__passed {
+  color: var(--color-success);
+  font-weight: 600;
+}
+
+// Results stream in one after another when the runner scrolls into view.
+@media (prefers-reduced-motion: no-preference) {
+  .test {
+    transition:
+      opacity 0.45s ease,
+      transform 0.45s var(--ease-out);
+    transition-delay: calc(400ms + var(--i) * 140ms);
+  }
+
+  :host .reveal:not(.is-revealed) .test {
+    opacity: 0;
+    transform: translateX(-0.5rem);
+  }
+}
+
+// ── Badges ─────────────────────────────────────────────────────────────────
+
+.badges {
+  display: grid;
+  gap: var(--space-3);
+  list-style: none;
+}
+
+.badge {
+  display: flex;
+  flex-wrap: wrap;
+  overflow: hidden;
+  width: fit-content;
+  max-width: 100%;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  line-height: 1.5;
+}
+
+.badge__left {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0.45rem 0.75rem;
+  background: var(--color-surface-2);
+  font-weight: 600;
+  color: var(--color-text);
+
+  app-icon {
+    color: var(--color-accent);
+  }
+}
+
+.badge__right {
+  padding: 0.45rem 0.75rem;
+  background: var(--color-accent);
+  font-weight: 500;
+  color: var(--color-on-accent);
+}
+
+@media print {
+  .runner__body {
+    padding: 0;
+  }
+
+  .runner__command,
+  .runner__suite {
+    display: none;
+  }
+
+  .badge__right {
+    background: none;
+    color: inherit;
+  }
+}

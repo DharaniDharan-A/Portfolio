@@ -1,0 +1,164 @@
+<app-window
+  title="knowledge-base — retrieval.demo"
+  tag="illustrative"
+  role="group"
+  aria-label="Developer Knowledge Base retrieval, illustrated with example data"
+>
+  <div
+    class="demo"
+    (pointerenter)="setHovering(true)"
+    (pointerleave)="setHovering(false)"
+    (focusin)="onFocusIn()"
+    (focusout)="onFocusOut($event)"
+  >
+    <div class="tabs" role="tablist" aria-label="Retrieval stages">
+      @for (tab of tabs; track tab.id; let i = $index) {
+        <button
+          type="button"
+          role="tab"
+          class="tabs__tab"
+          [id]="'rd-tab-' + tab.id"
+          [attr.aria-selected]="i === active()"
+          [attr.aria-controls]="'rd-panel-' + tab.id"
+          [tabIndex]="i === active() ? 0 : -1"
+          (click)="select(i)"
+          (keydown)="onTabKeydown($event, i)"
+        >
+          <span class="tabs__index" aria-hidden="true">{{ i + 1 }}</span>
+          {{ tab.label }}
+        </button>
+      }
+      @for (key of [dwellKey()]; track key) {
+        @if (autoplay()) {
+          <span class="tabs__timer" aria-hidden="true" [style.--dwell]="dwell + 'ms'"></span>
+        }
+      }
+    </div>
+
+    <!-- 1 · Error signatures -->
+    <div
+      class="panel"
+      role="tabpanel"
+      id="rd-panel-signature"
+      aria-labelledby="rd-tab-signature"
+      [hidden]="active() !== 0"
+    >
+      <p class="panel__lead">
+        Two occurrences of one fault, worded differently. Strip what varies — GUIDs, paths,
+        timestamps — and they share a signature.
+      </p>
+      <div class="errors" [class.is-normalised]="normalised()">
+        @for (sample of samples; track $index) {
+          <p class="error">
+            @for (part of sample; track $index) {
+              @if (part.volatile) {
+                <span class="error__volatile"
+                  ><span class="error__raw">{{ part.text }}</span
+                  ><span class="error__placeholder">{{ placeholders[part.volatile] }}</span></span
+                >
+              } @else {
+                <span>{{ part.text }}</span>
+              }
+            }
+          </p>
+        }
+      </div>
+      <div class="signature" [class.is-visible]="normalised()">
+        <span class="signature__label">signature</span>
+        <code class="signature__value">{{ signature }}</code>
+        <span class="signature__match"><app-icon name="check" /> same fault</span>
+      </div>
+      <button
+        type="button"
+        class="panel__action"
+        [attr.aria-pressed]="normalised()"
+        (click)="toggleNormalised()"
+      >
+        {{ normalised() ? 'Show raw errors' : 'Normalise' }}
+      </button>
+    </div>
+
+    <!-- 2 · Reciprocal Rank Fusion -->
+    <div
+      class="panel"
+      role="tabpanel"
+      id="rd-panel-fusion"
+      aria-labelledby="rd-tab-fusion"
+      [hidden]="active() !== 1"
+    >
+      <p class="panel__lead">
+        Three rankings fused with Reciprocal Rank Fusion:
+        <code class="formula">score(d) = Σ 1 / (k + rank)</code>, k = {{ k }}.
+      </p>
+      <div class="fusion">
+        <div class="fusion__inputs">
+          @for (list of rankings; track list.name) {
+            <div class="ranking">
+              <p class="ranking__name">{{ list.name }}</p>
+              <ol class="ranking__docs" role="list">
+                @for (doc of list.docs; track doc) {
+                  <li
+                    class="doc"
+                    [class.is-hot]="hoveredDoc() === doc"
+                    (pointerenter)="hoveredDoc.set(doc)"
+                    (pointerleave)="hoveredDoc.set(null)"
+                  >
+                    {{ doc }}
+                  </li>
+                }
+              </ol>
+            </div>
+          }
+        </div>
+        <div class="fusion__result">
+          <p class="ranking__name">fused</p>
+          <ol class="fused" role="list">
+            @for (row of fused; track row.doc; let i = $index) {
+              <li class="fused__row" [class.is-hot]="hoveredDoc() === row.doc" [style.--i]="i">
+                <span class="doc">{{ row.doc }}</span>
+                <span class="fused__bar">
+                  <span class="fused__fill" [style.--w]="row.score / topScore"></span>
+                </span>
+                <span class="fused__score">{{ row.score | number: '1.4-4' }}</span>
+              </li>
+            }
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3 · Refusal -->
+    <div
+      class="panel"
+      role="tabpanel"
+      id="rd-panel-refusal"
+      aria-labelledby="rd-tab-refusal"
+      [hidden]="active() !== 2"
+    >
+      <p class="panel__lead">
+        When nothing written down is relevant enough, the assistant declines — without calling the
+        LLM.
+      </p>
+      <p class="query"><span class="query__label">query</span> “{{ refusal.query }}”</p>
+      <div class="relevance">
+        <div class="relevance__track">
+          <span class="relevance__fill" [style.--w]="refusal.bestMatch"></span>
+          <span class="relevance__threshold" [style.--t]="refusal.threshold">
+            <span>threshold</span>
+          </span>
+        </div>
+        <p class="relevance__caption">best match falls below the relevance threshold</p>
+      </div>
+      <p class="verdict"><app-icon name="cross" /> Declined · no LLM call made</p>
+      <div class="near">
+        <p class="near__label">near misses</p>
+        <ul class="near__list" role="list">
+          @for (item of refusal.nearMisses; track item) {
+            <li><app-icon name="file" /> {{ item }}</li>
+          }
+        </ul>
+        <p class="near__offer"><app-icon name="arrow-right" /> Offer: start an article from this question</p>
+      </div>
+    </div>
+  </div>
+</app-window>

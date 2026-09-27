@@ -1,0 +1,107 @@
+@use 'breakpoints' as bp;
+
+// ── Statement ──────────────────────────────────────────────────────────────
+// Each word brightens from muted to full colour as the paragraph scrolls
+// through the viewport. Muted is still ≥ 7:1 contrast, so the text is readable
+// at every point of the effect.
+
+.statement {
+  max-width: 22ch;
+  font-size: var(--text-3xl);
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+
+  @include bp.up(md) {
+    max-width: 24ch;
+  }
+}
+
+.statement__word {
+  --lit: clamp(0, calc(var(--progress, 1) * var(--n) * 1.35 - var(--i)), 1);
+  color: color-mix(in oklab, var(--color-text) calc(var(--lit) * 100%), var(--color-text-muted));
+
+  &.is-accent {
+    color: color-mix(
+      in oklab,
+      var(--color-accent) calc(var(--lit) * 100%),
+      var(--color-text-muted)
+    );
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .statement__word {
+    --lit: 1;
+  }
+}
+
+// ── Body ───────────────────────────────────────────────────────────────────
+
+.about {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-7);
+  margin-top: clamp(3rem, 2rem + 4vw, 6rem);
+
+  @include bp.up(lg) {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: var(--space-8);
+    align-items: start;
+  }
+}
+
+.about__prose p {
+  color: var(--color-text-muted);
+
+  &:first-child {
+    color: var(--color-text);
+    font-size: var(--text-lg);
+  }
+}
+
+.yaml {
+  padding: var(--space-4) var(--space-5) var(--space-5);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  line-height: 1.9;
+
+  // YAML document fences — decoration, silenced for screen readers.
+  &::before,
+  &::after {
+    content: '---';
+    content: '---' / '';
+    display: block;
+    color: var(--syntax-comment);
+  }
+}
+
+.yaml__row {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 1ch;
+}
+
+.yaml__key {
+  color: var(--syntax-property);
+
+  &::after {
+    content: ':';
+    color: var(--syntax-punct);
+  }
+}
+
+.yaml__value {
+  color: var(--syntax-string);
+}
+
+@media print {
+  .statement__word {
+    --lit: 1;
+  }
+
+  .about {
+    margin-top: var(--space-4);
+  }
+}

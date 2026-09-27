@@ -1,0 +1,68 @@
+<header class="site-header" [class.is-scrolled]="scrolled() || menuOpen()">
+  <div class="container site-header__inner">
+    <a class="brand" href="#top" [attr.aria-label]="profile.name + ', back to top'">
+      <span class="brand__prompt" aria-hidden="true">~/</span>{{ profile.shortName }}
+    </a>
+
+    <nav class="nav" aria-label="Primary" (focusout)="onNavFocusOut($event)">
+      <button
+        #menuButton
+        type="button"
+        class="nav__toggle"
+        aria-controls="primary-navigation"
+        [attr.aria-expanded]="menuOpen()"
+        (click)="toggleMenu()"
+      >
+        <app-icon [name]="menuOpen() ? 'close' : 'menu'" />
+        <span>Menu</span>
+      </button>
+
+      <div id="primary-navigation" class="nav__panel" [class.is-open]="menuOpen()">
+        <ul class="nav__list" role="list">
+          @for (item of items; track item.id) {
+            <li>
+              <a
+                class="nav__link"
+                href="#{{ item.id }}"
+                [attr.aria-current]="activeSection() === item.id ? 'true' : null"
+                (click)="closeMenu()"
+              >
+                {{ item.label }}
+              </a>
+            </li>
+          }
+        </ul>
+
+        <!-- Utilities live in the status bar on wide screens; here on small ones. -->
+        <div class="nav__utilities">
+          <button type="button" class="nav__utility" (click)="openPalette()">
+            <app-icon name="command" />
+            Command palette
+          </button>
+          <button type="button" class="nav__utility" (click)="motion.toggle()">
+            <app-icon [name]="motion.playing() ? 'pause' : 'play'" />
+            {{ motion.playing() ? 'Pause animations' : 'Play animations' }}
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <button type="button" class="palette-trigger" (click)="openPalette()">
+      <app-icon name="search" />
+      <span class="palette-trigger__label">Search</span>
+      <span class="visually-hidden">: open the command palette</span>
+      <kbd class="key" aria-hidden="true">{{ palette.shortcut }}</kbd>
+    </button>
+
+    <button
+      type="button"
+      class="icon-button theme-toggle"
+      [attr.title]="themeLabel()"
+      (click)="toggleTheme($event)"
+    >
+      <app-icon [name]="theme.theme() === 'dark' ? 'sun' : 'moon'" />
+      <span class="visually-hidden">{{ themeLabel() }}</span>
+    </button>
+  </div>
+  <span class="site-header__progress" aria-hidden="true"></span>
+</header>

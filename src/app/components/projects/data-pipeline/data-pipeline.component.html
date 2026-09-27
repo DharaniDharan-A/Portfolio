@@ -1,0 +1,48 @@
+<figure class="pipeline" aria-labelledby="pipeline-caption">
+  <figcaption id="pipeline-caption" class="pipeline__caption">
+    <span class="comment">telecom data workflow</span>
+    <span class="pipeline__scale">datasets in the millions of records</span>
+  </figcaption>
+
+  <ol class="pipeline__stages" role="list">
+    <li class="stage">
+      <p class="stage__name"><span class="stage__index" aria-hidden="true">01</span> Ingestion</p>
+      <div class="stage__viz stage__viz--ingest" aria-hidden="true">
+        <div class="stream loop">
+          @for (width of rawRows; track $index) {
+            <span class="stream__row" [style.--w]="width + '%'"></span>
+          }
+          @for (width of rawRows; track $index) {
+            <span class="stream__row" [style.--w]="width + '%'"></span>
+          }
+        </div>
+      </div>
+    </li>
+
+    <li class="stage">
+      <p class="stage__name">
+        <span class="stage__index" aria-hidden="true">02</span> Transformation
+      </p>
+      <div class="stage__viz stage__viz--transform" aria-hidden="true">
+        <div class="cells">
+          @for (cell of gridCells; track cell) {
+            <span class="cells__cell loop" [style.--c]="cell % 6"></span>
+          }
+        </div>
+      </div>
+    </li>
+
+    <li class="stage">
+      <p class="stage__name">
+        <span class="stage__index" aria-hidden="true">03</span> Presentation
+      </p>
+      <div class="stage__viz stage__viz--present" aria-hidden="true">
+        <div class="chart">
+          @for (height of bars; track $index; let i = $index) {
+            <span class="chart__bar loop" [style.--h]="height + '%'" [style.--b]="i"></span>
+          }
+        </div>
+      </div>
+    </li>
+  </ol>
+</figure>

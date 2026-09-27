@@ -1,0 +1,125 @@
+// Design tokens. Colours are CSS custom properties so the theme can switch at
+// runtime by flipping `data-theme` on <html>. Every text colour — including the
+// syntax-highlighting set — meets WCAG AA on every background; `border-strong`
+// meets the 3:1 non-text minimum.
+
+@mixin dark-palette {
+  color-scheme: dark;
+  --color-bg: #080b12;
+  --color-surface: #0d1119;
+  --color-surface-2: #131926;
+  --color-border: #1e2536;
+  --color-border-strong: #606a88;
+  --color-text: #e7eaf0;
+  --color-text-muted: #9ea7b9;
+  --color-accent: #f0b35a;
+  --color-accent-hover: #f6c77f;
+  --color-accent-subtle: rgb(240 179 90 / 0.12);
+  --color-accent-glow: rgb(240 179 90 / 0.55);
+  --color-on-accent: #080b12;
+  --color-success: #7fd8b4;
+  --color-danger: #f29b8f;
+  --texture-line: rgb(231 234 240 / 0.045);
+  --glow-cursor: rgb(240 179 90 / 0.075);
+  --grain-opacity: 0.07;
+  --shadow-window: 0 30px 80px -20px rgb(0 0 0 / 0.65), 0 0 0 1px rgb(255 255 255 / 0.02);
+
+  --syntax-keyword: #b3bccd;
+  --syntax-string: #8fd9c0;
+  --syntax-function: #f0b35a;
+  --syntax-type: #f2f4f8;
+  --syntax-number: #f6c77f;
+  --syntax-comment: #8a93a8;
+  --syntax-punct: #8f99ad;
+  --syntax-property: #d6dbe5;
+}
+
+@mixin light-palette {
+  color-scheme: light;
+  --color-bg: #f6f5f1;
+  --color-surface: #ffffff;
+  --color-surface-2: #efede7;
+  --color-border: #dcd8cf;
+  --color-border-strong: #857f72;
+  --color-text: #10151f;
+  --color-text-muted: #4a5163;
+  --color-accent: #8f5200;
+  --color-accent-hover: #6f3f00;
+  --color-accent-subtle: rgb(143 82 0 / 0.1);
+  --color-accent-glow: rgb(143 82 0 / 0.35);
+  --color-on-accent: #ffffff;
+  --color-success: #0d6e4f;
+  --color-danger: #b42318;
+  --texture-line: rgb(16 21 31 / 0.055);
+  --glow-cursor: rgb(143 82 0 / 0.05);
+  --grain-opacity: 0.035;
+  --shadow-window: 0 30px 70px -30px rgb(16 21 31 / 0.3), 0 0 0 1px rgb(16 21 31 / 0.02);
+
+  --syntax-keyword: #545d70;
+  --syntax-string: #0d6e4f;
+  --syntax-function: #8f5200;
+  --syntax-type: #10151f;
+  --syntax-number: #9a4d00;
+  --syntax-comment: #636b7e;
+  --syntax-punct: #5b6376;
+  --syntax-property: #26304a;
+}
+
+:root {
+  @include dark-palette;
+
+  // Typography
+  --font-sans: 'Geist', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, 'SFMono-Regular', 'Cascadia Mono', Menlo, Consolas,
+    monospace;
+
+  --text-2xs: 0.75rem;
+  --text-xs: 0.8125rem;
+  --text-sm: 0.9375rem;
+  --text-base: 1.0625rem;
+  --text-lg: clamp(1.125rem, 1.07rem + 0.25vw, 1.25rem);
+  --text-xl: clamp(1.3125rem, 1.2rem + 0.55vw, 1.625rem);
+  --text-2xl: clamp(1.75rem, 1.4rem + 1.5vw, 2.5rem);
+  --text-3xl: clamp(2.25rem, 1.5rem + 3.2vw, 4.25rem);
+  --text-4xl: clamp(2.75rem, 1.2rem + 6.4vw, 7rem);
+  --text-hero: clamp(2.75rem, 0.35rem + 10.6vw, 10.5rem);
+
+  // Spacing
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+  --space-9: 6rem;
+  --section-space: clamp(5rem, 3rem + 7vw, 10rem);
+
+  // Layout
+  --content-max: 75rem; // 1200px
+  --gutter: clamp(1rem, 0.4rem + 2.6vw, 2.5rem); // 16px at 360px
+  --header-height: 4rem;
+  --status-height: 0px; // set to the status bar height where it's shown
+  --measure: 68ch;
+
+  // Shape & motion
+  --radius-sm: 3px;
+  --radius: 6px;
+  --radius-lg: 10px;
+  --duration-fast: 160ms;
+  --duration-slow: 800ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+:root[data-theme='light'] {
+  @include light-palette;
+}
+
+// Fallback if the inline theme script in index.html never ran.
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    @include light-palette;
+  }
+}

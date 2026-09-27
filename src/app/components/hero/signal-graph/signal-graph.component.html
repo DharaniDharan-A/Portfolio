@@ -1,0 +1,79 @@
+<svg
+  #svg
+  class="graph"
+  [attr.viewBox]="'0 0 ' + layout().width + ' ' + layout().height"
+  [attr.font-size]="layout().fontSize"
+  aria-hidden="true"
+  focusable="false"
+>
+  <defs>
+    <filter id="graph-glow" x="-200%" y="-200%" width="500%" height="500%">
+      <feGaussianBlur stdDeviation="3.5" />
+    </filter>
+  </defs>
+
+  @for (header of layout().headers; track header.label) {
+    <text class="graph__header" [attr.x]="header.x" [attr.y]="header.y" text-anchor="middle">
+      {{ header.label }}
+    </text>
+  }
+
+  <g>
+    @for (edge of layout().edges; track edge.id) {
+      <path
+        class="graph__wire"
+        [class.is-lit]="litEdges().has(edge.id)"
+        [attr.d]="edge.d"
+        [attr.data-edge]="edge.id"
+        pathLength="1"
+        [style.--i]="edge.order"
+      />
+    }
+  </g>
+
+  <g #pulseLayer></g>
+
+  @for (node of layout().nodes; track node.id) {
+    <g
+      class="graph__node"
+      [class.is-lit]="litNodes().has(node.id)"
+      [attr.data-kind]="node.kind"
+      [attr.data-node]="node.id"
+      [attr.transform]="'translate(' + node.x + ' ' + node.y + ')'"
+      [style.--i]="node.order"
+      (pointerenter)="trigger(node.id)"
+    >
+      <rect
+        class="graph__box"
+        [attr.x]="-node.w / 2"
+        [attr.y]="-layout().nodeHeight / 2"
+        [attr.width]="node.w"
+        [attr.height]="layout().nodeHeight"
+        rx="6"
+      />
+      <rect
+        class="graph__flash"
+        [attr.x]="-node.w / 2"
+        [attr.y]="-layout().nodeHeight / 2"
+        [attr.width]="node.w"
+        [attr.height]="layout().nodeHeight"
+        rx="6"
+      />
+      <text class="graph__label" text-anchor="middle" dominant-baseline="central">
+        {{ node.label }}
+      </text>
+    </g>
+  }
+
+  <text
+    #outputText
+    class="graph__output"
+    [attr.x]="layout().output.x"
+    [attr.y]="layout().output.y"
+    text-anchor="middle"
+  >
+    @for (line of outputLines; track $index) {
+      <tspan [attr.x]="layout().output.x" [attr.dy]="$first ? 0 : '1.4em'">{{ line }}</tspan>
+    }
+  </text>
+</svg>

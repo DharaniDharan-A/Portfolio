@@ -1,0 +1,126 @@
+<section id="projects" class="section" aria-labelledby="projects-title">
+  <div class="container">
+    <app-section-header index="03" title="Projects" titleId="projects-title" selector="app-projects">
+      <p class="section__intro">
+        Product work at Ducen, followed by three personal projects in retrieval, API monitoring and
+        agent orchestration.
+      </p>
+    </app-section-header>
+
+    <!-- ── Featured: full case study ─────────────────────────────────────── -->
+    @for (project of featured; track project.id) {
+      <article class="case" [id]="project.id" [attr.aria-labelledby]="project.id + '-title'">
+        <header class="case__header" appReveal>
+          @if (project.context) {
+            <p class="case__context">
+              <span class="comment">{{ project.context }}</span>
+              @if (project.period) {
+                <span class="case__period">{{ project.period }}</span>
+              }
+            </p>
+          }
+          <h3 class="case__title" [id]="project.id + '-title'">{{ project.title }}</h3>
+          @if (project.tagline) {
+            <p class="case__tagline">{{ project.tagline }}</p>
+          }
+          <p class="case__summary">{{ project.summary }}</p>
+        </header>
+
+        <div class="case__body">
+          <div class="case__work" appReveal>
+            <h4 class="comment" [id]="project.id + '-highlights'">{{ project.highlightsLabel }}</h4>
+            <ol class="work" role="list" [attr.aria-labelledby]="project.id + '-highlights'">
+              @for (item of project.highlights; track item; let i = $index) {
+                <li class="work__item">
+                  <span class="work__index" aria-hidden="true">{{
+                    (i + 1).toString().padStart(2, '0')
+                  }}</span>
+                  <span>{{ item }}</span>
+                </li>
+              }
+            </ol>
+          </div>
+
+          <app-architecture
+            class="case__arch"
+            [layers]="project.stack"
+            clients="Enterprise clients"
+            appReveal
+            [appRevealDelay]="120"
+          />
+        </div>
+
+        <app-data-pipeline class="case__pipeline" appReveal />
+      </article>
+    }
+
+    <!-- ── Personal projects, each with an illustrative demo ─────────────── -->
+    <div class="personal">
+      <h3 class="personal__title">
+        Personal projects
+        <span class="personal__count" aria-hidden="true">{{ personal.length }}</span>
+      </h3>
+
+      @for (project of personal; track project.id; let i = $index) {
+        <article class="project" [id]="project.id" [attr.aria-labelledby]="project.id + '-title'">
+          <div class="project__text" appReveal>
+            <p class="project__index" aria-hidden="true">
+              {{ (i + 1).toString().padStart(2, '0') }} / {{
+                personal.length.toString().padStart(2, '0')
+              }}
+            </p>
+            <h4 class="project__title" [id]="project.id + '-title'">{{ project.title }}</h4>
+            <p class="project__summary">{{ project.summary }}</p>
+
+            @if (project.note) {
+              <p class="project__note">{{ project.note }}</p>
+            }
+
+            <p class="comment project__caption" [id]="project.id + '-highlights'">
+              {{ project.highlightsLabel }}
+            </p>
+            <ul class="rule-list" role="list" [attr.aria-labelledby]="project.id + '-highlights'">
+              @for (item of project.highlights; track item) {
+                <li>{{ item }}</li>
+              }
+            </ul>
+
+            <p class="comment project__caption" [id]="project.id + '-stack'">stack</p>
+            <ul class="chip-list" role="list" [attr.aria-labelledby]="project.id + '-stack'">
+              @for (layer of project.stack; track $index) {
+                @for (item of layer.items; track item) {
+                  <li class="chip">{{ item }}</li>
+                }
+              }
+            </ul>
+
+            <!-- TODO: Add GitHub repository link when this project is public -->
+            <!-- Set `repositoryUrl` for the project in src/app/data/projects.ts and the link below renders. -->
+            @if (project.repositoryUrl) {
+              <p class="project__links">
+                <a class="text-link" [href]="project.repositoryUrl">
+                  <app-icon name="github" />
+                  Source on GitHub<span class="visually-hidden">: {{ project.title }}</span>
+                </a>
+              </p>
+            }
+          </div>
+
+          <div class="project__demo" appReveal [appRevealDelay]="150">
+            @switch (project.demo) {
+              @case ('retrieval') {
+                <app-retrieval-demo />
+              }
+              @case ('probes') {
+                <app-probe-demo />
+              }
+              @case ('agents') {
+                <app-agent-loop-demo />
+              }
+            }
+          </div>
+        </article>
+      }
+    </div>
+  </div>
+</section>
